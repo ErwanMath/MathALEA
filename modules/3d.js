@@ -624,13 +624,18 @@ class Cube{
     this.lstPoints = [];
     this.lstPolygone = [];
     function proj(x,y,z,alpha, beta) {
+      //alpha est la rotation autour de l'axe Oz
+      //beta est la rotation autour de la trace du plan (Oxy) sur le plan de projection
       const cosa = Math.cos(alpha*Math.PI/180);
       const sina = Math.sin(alpha*Math.PI/180);
       const cosb = Math.cos(beta*Math.PI/180);
       const sinb = Math.sin(beta*Math.PI/180);
       return point(cosa*x-sina*y, -sina*sinb*x-cosa*sinb*y+cosb*z);
     }
-      
+    if (alpha<0) {
+      x = x + 1;
+      [this.colorD, this.colorG] = [this.colorG, this.colorD]
+    }
     this.lstPoints.push(proj(this.x,this.y,this.z,this.alpha, this.beta)) // point 0 en bas
     this.lstPoints.push(proj(this.x+1,this.y,this.z,this.alpha, this.beta)) // point 1
     this.lstPoints.push(proj(this.x+1,this.y,this.z+1,this.alpha, this.beta)) // point 2
