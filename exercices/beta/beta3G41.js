@@ -32,7 +32,7 @@ export default function VuesEmpilementCubes() {
     let liste_type_de_questions = combinaison_listes(type_de_questions_disponibles, this.nb_questions)
     let objets_enonce,objets_correction,params_enonce,params_correction ;
     
-    function empilementCubes(long, larg, hmax) {
+    function empilementCubes(long, larg, hmax, alpha) {
       let tabHauteurs = new Array(larg);
       for (let i = 0; i < larg; i++) {
         tabHauteurs[i] = new Array(long);
@@ -54,12 +54,21 @@ export default function VuesEmpilementCubes() {
       // Ajoute les cubes dans un tableau une dimension
       // il faut trier les cubes : x décroissant puis y décroissant, puis z croissant
       let lstCoordonneesCubes = [];
-      for (let i = larg-1 ; i>-1; i=i-1) {
-        for (let j = long-1 ; j>-1; j=j-1) {
-          for (let k=0 ; k < tabHauteurs[i][j]; k++)
-          lstCoordonneesCubes.push([i,j,k])
-        }          
-      }
+      if (alpha>0) {
+        for (let i = larg-1 ; i>-1; i=i-1) {
+          for (let j = long-1 ; j>-1; j=j-1) {
+            for (let k=0 ; k < tabHauteurs[i][j]; k++)
+            lstCoordonneesCubes.push([i,j,k])
+          }          
+        }
+      } else {
+          for (let j = long-1 ; j>-1; j=j-1) {
+            for (let i = larg-1 ; i>-1; i=i-1) {
+              for (let k=0 ; k < tabHauteurs[i][j]; k++)
+              lstCoordonneesCubes.push([i,j,k])
+            }
+          }
+        }
     return lstCoordonneesCubes;
     } 
     
@@ -80,31 +89,38 @@ export default function VuesEmpilementCubes() {
       // cube(x,y,z,90,0) : vue de gauche
       // cube(x,y,z,0,0) : vue de droite
       // cube(x,y,z,45,-35) : vue isométrique              
+      alpha = -25;
+      beta = -30;
+      cosa = Math.cos(alpha*Math.PI/180);
+      sina = Math.sin(alpha*Math.PI/180);
+      cosb = Math.cos(beta*Math.PI/180);
+      sinb = Math.sin(beta*Math.PI/180);
+      params_enonce = {
+        xmin:-sina*largeur - 0.5, 
+        ymin: -0.5, 
+        xmax: cosa*longueur + 0.5, 
+        ymax: -sina*sinb*longueur - cosa*sinb*largeur + cosb*hauteur + 0.5, 
+        pixelsParCm: 20, 
+        scale: 1, 
+        mainlevee: false} ;       
 
       switch (liste_type_de_questions[q]) {
         case 1:
           // GAUCHE
-          alpha = 15;
-          beta = -30;
           texte += `Solide 1 : dessiner la vue de gauche (les faces grises) de cet empilement de cubes. <br>`
-          L = empilementCubes(longueur, largeur, hauteur);
-          objets_enonce = [] ;
-          for (let i = 0; i < L.length; i++) {
-            objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
-          }
+          alpha = -25;
+          beta = -30;
           cosa = Math.cos(alpha*Math.PI/180);
           sina = Math.sin(alpha*Math.PI/180);
           cosb = Math.cos(beta*Math.PI/180);
           sinb = Math.sin(beta*Math.PI/180);
-          params_enonce = {
-            xmin:-sina*largeur - 0.5, 
-            ymin: -0.5, 
-            xmax: cosa*longueur + 0.5, 
-            ymax: -sina*sinb*longueur - cosa*sinb*largeur + cosb*hauteur + 0.5, 
-            pixelsParCm: 20, 
-            scale: 1, 
-            mainlevee: false} ;       
-          texte += mathalea2d(params_enonce, objets_enonce) + " "; 
+    
+          L = empilementCubes(longueur, largeur, hauteur, alpha);
+          objets_enonce = [] ;
+          for (let i = 0; i < L.length; i++) {
+            objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
+          }
+          texte += mathalea2d(params_enonce, objets_enonce) + "<br> "; 
           // correction :
           texte_corr += "Solide 1 : vue de gauche (les faces grises) : ";
           alpha = 90;
@@ -129,17 +145,13 @@ export default function VuesEmpilementCubes() {
 
           // FACE
           texte += `Solide 2 : dessiner la vue de face (les faces vertes) de cet empilement de cubes. <br>`;
-          L = empilementCubes(longueur, largeur, hauteur);
-          objets_enonce = [] ;
-          for (let i = 0; i < L.length; i++) {
-            objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
-          }
-          alpha = 15;
+          alpha = 25;
           beta = -30;
           cosa = Math.cos(alpha*Math.PI/180);
           sina = Math.sin(alpha*Math.PI/180);
           cosb = Math.cos(beta*Math.PI/180);
           sinb = Math.sin(beta*Math.PI/180);
+          L = empilementCubes(longueur, largeur, hauteur, alpha);
           params_enonce = {
             xmin:-sina*largeur - 0.5, 
             ymin: -0.5, 
@@ -148,7 +160,12 @@ export default function VuesEmpilementCubes() {
             pixelsParCm: 20, 
             scale: 1, 
             mainlevee: false} ;       
-          texte += mathalea2d(params_enonce, objets_enonce) + " "; 
+    
+          objets_enonce = [] ;
+          for (let i = 0; i < L.length; i++) {
+            objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
+          }
+          texte += mathalea2d(params_enonce, objets_enonce) + "<br> "; 
           // correction :
           texte_corr += "Solide 2 : vue de face (les faces vertes) : "
           alpha = 0;
@@ -173,19 +190,18 @@ export default function VuesEmpilementCubes() {
 
           //HAUT
           texte += `Solide 3 : dessiner la vue de haut (les faces blanches) de cet empilement de cubes. <br>`
-          L = empilementCubes(longueur, largeur);
-          alpha = 15;
+          alpha = 25;
           beta = -30;
-          objets_enonce = [] ;
-          for (let i = 0; i < L.length; i++) {
-            objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
-          }
-          alpha = 15;
-          beta = -30;
+          L = empilementCubes(longueur, largeur, hauteur, alpha);
           cosa = Math.cos(alpha*Math.PI/180);
           sina = Math.sin(alpha*Math.PI/180);
           cosb = Math.cos(beta*Math.PI/180);
           sinb = Math.sin(beta*Math.PI/180);
+    
+          objets_enonce = [] ;
+          for (let i = 0; i < L.length; i++) {
+            objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
+          }
           params_enonce = {
             xmin:-sina*largeur - 0.5, 
             ymin: -0.5, 
@@ -194,7 +210,7 @@ export default function VuesEmpilementCubes() {
             pixelsParCm: 20, 
             scale: 1, 
             mainlevee: false} ;       
-          texte += mathalea2d(params_enonce, objets_enonce) + " "; 
+          texte += mathalea2d(params_enonce, objets_enonce) + "<br>"; 
           // correction :
           texte_corr += "Solide 3 : vue de haut (les faces blanches) : "
           alpha = 0;
@@ -220,9 +236,9 @@ export default function VuesEmpilementCubes() {
 
         case 2:
           texte += `Dessiner les vues de haut (les faces blanches), de face (les faces vertes), et de gauche (les faces grises) de cet empilement de cubes. <br>`;
-          L = empilementCubes(longueur, largeur);
           alpha = 15;
           beta = -30;
+          L = empilementCubes(longueur, largeur, hauteur, alpha);
           objets_enonce = [] ;
           for (let i = 0; i < L.length; i++) {
             objets_enonce.push(cube(L[i][0], L[i][1], L[i][2], alpha, beta,{}));
