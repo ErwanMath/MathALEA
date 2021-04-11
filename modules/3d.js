@@ -633,16 +633,25 @@ class Cube{
       return point(cosa*x-sina*y, -sina*sinb*x-cosa*sinb*y+cosb*z);
     }
     if (alpha<0) {
-      x = x + 1;
-      [this.colorD, this.colorG] = [this.colorG, this.colorD]
+      this.lstPoints.push(proj(this.x+1,this.y,this.z,this.alpha, this.beta)) // point 0 en bas
+      this.lstPoints.push(proj(this.x+1,this.y+1,this.z,this.alpha, this.beta)) // point 1
+      this.lstPoints.push(proj(this.x+1,this.y+1,this.z+1,this.alpha, this.beta)) // point 2
+      this.lstPoints.push(proj(this.x+1,this.y,this.z+1,this.alpha, this.beta)) //point 3
+      this.lstPoints.push(proj(this.x,this.y+1,this.z+1,this.alpha, this.beta)) // point 4
+      this.lstPoints.push(proj(this.x,this.y,this.z+1,this.alpha, this.beta)) // point 5
+      this.lstPoints.push(proj(this.x,this.y,this.z,this.alpha, this.beta)) // point 6  
+      this.colorT=colorD;
+      this.colorG=colorG
+      this.colorD=colorT
+    } else {
+      this.lstPoints.push(proj(this.x,this.y,this.z,this.alpha, this.beta)) // point 0 en bas
+      this.lstPoints.push(proj(this.x+1,this.y,this.z,this.alpha, this.beta)) // point 1
+      this.lstPoints.push(proj(this.x+1,this.y,this.z+1,this.alpha, this.beta)) // point 2
+      this.lstPoints.push(proj(this.x,this.y,this.z+1,this.alpha, this.beta)) //point 3
+      this.lstPoints.push(proj(this.x+1,this.y+1,this.z+1,this.alpha, this.beta)) // point 4
+      this.lstPoints.push(proj(this.x,this.y+1,this.z+1,this.alpha, this.beta)) // point 5
+      this.lstPoints.push(proj(this.x,this.y+1,this.z,this.alpha, this.beta)) // point 6  
     }
-    this.lstPoints.push(proj(this.x,this.y,this.z,this.alpha, this.beta)) // point 0 en bas
-    this.lstPoints.push(proj(this.x+1,this.y,this.z,this.alpha, this.beta)) // point 1
-    this.lstPoints.push(proj(this.x+1,this.y,this.z+1,this.alpha, this.beta)) // point 2
-    this.lstPoints.push(proj(this.x,this.y,this.z+1,this.alpha, this.beta)) //point 3
-    this.lstPoints.push(proj(this.x+1,this.y+1,this.z+1,this.alpha, this.beta)) // point 4
-    this.lstPoints.push(proj(this.x,this.y+1,this.z+1,this.alpha, this.beta)) // point 5
-    this.lstPoints.push(proj(this.x,this.y+1,this.z,this.alpha, this.beta)) // point 6
     let p
     p=polygone([this.lstPoints[0], this.lstPoints[1],this.lstPoints[2], this.lstPoints[3]], "black")
     p.opaciteDeRemplissage=1;
