@@ -259,13 +259,29 @@
           </div>
             <div class="ui hidden divider"></div>
             <div id="overleaf">
-              <form method="POST" action="https://www.overleaf.com/docs" target="_blank" >
-              <div class="form-group text-center">
-              <input type="hidden" name="encoded_snip" value="" autocomplete="off">
-              <input type="hidden" name="snip_name" value="CoopMaths" autocomplete="off">
-              <button class="btn-success btn btn-smclass ui labeled icon button" id="btn_overleaf" type="submit" >
-              <i class="cogs icon"></i>Compiler sur Overleaf.com</button></div></form>
-        
+              <!-- <form method="POST" action="https://www.overleaf.com/docs" target="_blank" >
+                <div class="form-group text-center">
+                  <input type="hidden" name="encoded_snip" value="" autocomplete="off">
+                  <input type="hidden" name="snip_name" value="CoopMaths" autocomplete="off">
+                  <button class="btn-success btn btn-smclass ui labeled icon button" id="btn_overleaf" type="submit" >
+                    <i class="cogs icon"></i>Compiler sur Overleaf.com
+                  </button>
+                </div>
+              </form>        -->
+              <form name="zips" method="post" action="zip.php">
+                <!-- champ erreur -->
+                <?php if(!empty($error)) { ?>
+                <p style=" border:#C10000 1px solid; background-color:#FFA8A8; color:#B00000;padding:8px; width:588px; margin:0 auto 10px;"><?php echo $error; ?></p>
+                <?php } ?>
+                <!-- Création du zip -->
+                <input type="hidden" name="encoded_snip" value="" autocomplete="off">
+                <!-- <input type="submit" name="createzip" id="btn_overleaf" style="border:0px; background-color:#800040; color:#FFF; padding:10px; cursor:pointer; font-weight:bold; border-radius:5px;" value="Créer le ZIP temp sur le serveur" />  -->
+                <button class="btn-success btn btn-smclass ui labeled icon button" type="submit" name="createzip" id="btn_overleaf"> 
+                  <i class="cogs icon"></i>Compiler sur Overleaf.com
+                </button>
+
+              </form>
+ 
             </div>
 
             <div>
