@@ -504,6 +504,10 @@ export let dictionnaireDesExercicesAleatoires =
         "titre": "Racine carré d'un carré parfait (calcul mental)",
         "url": "/exercices/4e/4G20-2.js"
     },
+    "4G20-5": {
+        "titre": "Trouver la valeur arrondie d'une racine carrée",
+        "url": "/exercices/4e/4G20-5.js"
+    },
     "4G20MG32": {
         "titre": "Calculer une longueur avec l'égalité de Pythagore (MG32)",
         "url": "/exercices/4e/4G20MG32.js"
